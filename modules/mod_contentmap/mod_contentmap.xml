@@ -1,0 +1,696 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="1.7" method="upgrade" client="site">
+	<name>mod_contentmap</name>
+	<creationDate>13/02/2012</creationDate>
+	<author>Open Source Solutions SLU</author>
+	<authorEmail>info@opensourcesolutions.es</authorEmail>
+	<authorUrl>http://www.opensourcesolutions.es/</authorUrl>
+	<copyright>Open Source Solutions SLU</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<version>1.3.5</version>
+	<description>MOD_CONTENTMAP_DESCRIPTION</description> <!-- Used in Module Manager > New > Select a Module Type. Translation in modules/mod_contentmap/language/xx-XX/xx-XX.mod_contentmap.ini -->
+
+	<files>
+		<filename module="mod_contentmap">mod_contentmap.php</filename>
+		<filename>mod_contentmap.xml</filename>
+		<filename>index.html</filename>
+		<folder>language</folder>
+		<folder>sql</folder>
+		<folder>tmpl</folder>
+	</files>
+<!--
+	<install>
+		<sql><file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file></sql>
+	</install>
+-->
+	<config>
+		<fields name="params" addfieldpath="/libraries/contentmap/models/fields">
+
+			<fieldset name="basic" addfieldpath="/libraries/contentmap/models/fields">
+				<field type="langloader"/>
+				<field type="wizard" icon="exclamation-16.png" text="CONTENTMAP_NO_DATA" url="index.php?option=com_contentmap"/>
+				<field type="transchecker"/>
+				<field type="register"/>
+				<field name="api_key" type="text" label="CONTENTMAP_API_KEY_LBL" description="CONTENTMAP_API_KEY_DSC" size="26"/>
+				<field type="ossheader" default="CONTENTMAP_MAP_LAYOUT" icon="map-16.png"/>
+				<field name="map_width" type="text" size="6" label="CONTENTMAP_WIDTH" description="CONTENTMAP_MAPWIDTH_DSC" default="100" required="true"/>
+				<field name="map_width_unit" type="list" label="CONTENTMAP_UNITS_LBL" default="%">
+					<option value="px">CONTENTMAP_PIXELS</option>
+					<option value="%">CONTENTMAP_PERCENT</option>
+				</field>
+				<field name="map_height" type="text" size="6" label="CONTENTMAP_HEIGHT" description="CONTENTMAP_MAPHEIGHT_DSC" default="400" required="true"/>
+				<field name="zoom" type="list" label="CONTENTMAP_ZOOM_LBL" description="CONTENTMAP_ZOOM_DSC" default="0">
+					<option value="0">CONTENTMAP_AUTOMATIC</option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+					<option value="11">11</option>
+					<option value="12">12</option>
+					<option value="13">13</option>
+					<option value="14">14</option>
+					<option value="15">15</option>
+					<option value="16">16</option>
+					<option value="17">17</option>
+					<option value="18">18</option>
+					<option value="19">19</option>
+					<option value="20">20</option>
+					<option value="21">21</option>
+				</field>
+				<field name="center" type="text" label="CONTENTMAP_CENTER_LBL" description="CONTENTMAP_CENTER_DSC" />
+
+				<field name="map_type" type="list" label="CONTENTMAP_MAPTYPE_LBL" default="ROADMAP">
+					<option value="ROADMAP">CONTENTMAP_MAPTYPE_ROADMAP</option>
+					<option value="SATELLITE">CONTENTMAP_MAPTYPE_SATELLITE</option>
+					<option value="HYBRID">CONTENTMAP_MAPTYPE_HYBRID</option>
+					<option value="TERRAIN">CONTENTMAP_MAPTYPE_TERRAIN</option>
+				</field>
+				
+				<field name="kml_url" type="url" default="" label="CONTENTMAP_KML_URL_LBL" description="CONTENTMAP_KML_URL_DSC" />
+				
+                <field name="hideStreetViewControl" type="list" label="CONTENTMAP_HIDE_STREETVIEW_CONTROL" description="CONTENTMAP_HIDE_STREETVIEW_CONTROL_DSC" default="0">
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
+                <field name="hideZoomControl" type="list" label="CONTENTMAP_HIDE_ZOOM_CONTROL" description="CONTENTMAP_HIDE_ZOOM_CONTROL_DSC" default="0">
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
+
+				<field name="watermark_url" type="url" default="" label="CONTENTMAP_WATERMARK_URL_LBL" description="CONTENTMAP_WATERMARK_URL_DSC" />
+				<field name="watermark_position" type="list" label="CONTENTMAP_WATERMARK_POSITION_LBL" default="RIGHT_TOP">
+					<option value="TOP_CENTER">CONTENTMAP_WATERMARK_POSITION_TOP_CENTER</option>
+					<option value="TOP_LEFT">CONTENTMAP_WATERMARK_POSITION_TOP_LEFT</option>
+					<option value="TOP_RIGHT">CONTENTMAP_WATERMARK_POSITION_TOP_RIGHT</option>
+					<option value="LEFT_TOP">CONTENTMAP_WATERMARK_POSITION_LEFT_TOP</option>
+					<option value="RIGHT_TOP">CONTENTMAP_WATERMARK_POSITION_RIGHT_TOP</option>
+					<option value="LEFT_CENTER">CONTENTMAP_WATERMARK_POSITION_LEFT_CENTER</option>
+					<option value="RIGHT_CENTER">CONTENTMAP_WATERMARK_POSITION_RIGHT_CENTER</option>
+					<option value="LEFT_BOTTOM">CONTENTMAP_WATERMARK_POSITION_LEFT_BOTTOM</option>
+					<option value="RIGHT_BOTTOM">CONTENTMAP_WATERMARK_POSITION_RIGHT_BOTTOM</option>
+					<option value="BOTTOM_CENTER">CONTENTMAP_WATERMARK_POSITION_BOTTOM_CENTER</option>
+					<option value="BOTTOM_LEFT">CONTENTMAP_WATERMARK_POSITION_BOTTOM_LEFT</option>
+					<option value="BOTTOM_RIGHT">CONTENTMAP_WATERMARK_POSITION_BOTTOM_RIGHT</option>
+				</field>
+				
+				<field name="bottom_description" type="textarea" default="" label="CONTENTMAP_BOTTOM_DESCRIPTION_LABEL" description="CONTENTMAP_BOTTOM_DESCRIPTION_DSC" rows="10" cols="5" filter="safehtml" />
+				
+				<field name="show_weather" type="list" default="0" label="CONTENTMAP_SHOW_WEATHER_LABEL" description="CONTENTMAP_SHOW_WEATHER_DESC">
+					<option value="0">JHIDE</option>
+					<option value="1">JSHOW</option>
+				</field>
+				
+				
+				<field name="hide_poi" type="list" default="0" label="CONTENTMAP_HIDE_POI_LABEL" description="CONTENTMAP_HIDE_POI_DSC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				
+				
+				
+				
+				<field type="ossheader" default="CONTENTMAP_MARKERS_OPTIONS" icon="marker-16.png"/>
+				<field name="markers_icon" type="filelist" label="CONTENTMAP_MARKERS_ICON_LBL" description="CONTENTMAP_MARKERS_ICON_DSC" default="" hide_none="true" directory="media/contentmap/markers/icons" filter="\.png$" exclude="" stripext="" />
+                <field name="markers_preview" type="markerpreview" label="CONTENTMAP_MARKERS_PREVIEW"/>
+				<field name="markers_action" type="list" label="CONTENTMAP_MARKERS_ACTION_LBL" description="CONTENTMAP_MARKERS_ACTION_DSC" default="infowindow">
+					<option value="infowindow">CONTENTMAP_MARKERS_ACTION_BALLOON</option>
+					<option value="redirect">CONTENTMAP_MARKERS_ACTION_REDIRECT</option>
+				</field>
+				
+				<field name="cluster" type="list" label="CONTENTMAP_MARKERS_CLUSTER_LBL" description="CONTENTMAP_MARKERS_CLUSTER_DSC" default="1">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+                <field name="showDirectionsMarker" type="list" label="CONTENTMAP_MARKERS_SHOW_DIRECTIONS_LBL" default="0">
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
+
+				<field type="ossheader" default="CONTENTMAP_INFOWINDOWS" icon="infowindow-16.png"/>
+				<field name="infowindow_event" type="list" default="click" label="CONTENTMAP_INFOWINDOW_ACTION_LBL" description="CONTENTMAP_INFOWINDOW_ACTION_DSC">
+					<option value="click">CONTENTMAP_INFOWINDOW_ACTION_CLICK</option>
+					<option value="mouseover">CONTENTMAP_INFOWINDOW_ACTION_MOUSEOVER</option>
+					<option value="never">JDISABLED</option>
+				</field>
+				<!-- Infowindow maxWidth doesn't work as expected -->
+				<field name="infowindow_width" type="text" size="26" label="CONTENTMAP_WIDTH" description="CONTENTMAP_INFOWINDOWWIDTH_DSC" default="400"/>
+
+				<field name="show_title" type="list" default="1" label="JGLOBAL_SHOW_TITLE_LABEL" description="JGLOBAL_SHOW_TITLE_DESC">
+					<option value="0">JHIDE</option>
+					<option value="1">JSHOW</option>
+				</field>
+				<field name="link_titles" type="list" default="1" label="JGLOBAL_LINKED_TITLES_LABEL" description="JGLOBAL_LINKED_TITLES_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="link_target" type="list" label="CONTENTMAP_INFOWINDOW_TARGET_LBL" description="CONTENTMAP_INFOWINDOW_TARGET_DSC" default="_self">
+					<option value="_self">CONTENTMAP_TARGET_SELF</option>
+					<option value="_blank">CONTENTMAP_TARGET_BLANK</option>
+					<option value="_parent">CONTENTMAP_TARGET_PARENT</option>
+					<option value="_top">CONTENTMAP_TARGET_TOP</option>
+				</field>
+				
+				<field name="show_readmore" type="list" default="0" label="CONTENTMAP_SHOW_READMORE_LABEL" description="CONTENTMAP_SHOW_READMORE_DESC">
+					<option value="0">JHIDE</option>
+					<option value="1">JSHOW</option>
+				</field>
+				
+				<field name="show_image" type="list" default="1" label="CONTENTMAP_INFOWINDOW_SHOWIMAGE_LBL" description="CONTENTMAP_INFOWINDOW_SHOWIMAGE_DSC">
+					<option value="0">JHIDE</option>
+					<option value="1">JSHOW</option>
+				</field>
+				
+				
+				<field name="image_max_width" type="text" size="6" label="CONTENTMAP_INFOWINDOW_IMAGE_MAX_WIDTH_LBL" description="CONTENTMAP_INFOWINDOW_IMAGE_MAX_WIDTH_DSC" default="0"/>
+				<field name="image_max_height" type="text" size="6" label="CONTENTMAP_INFOWINDOW_IMAGE_MAX_HEIGHT_LBL" description="CONTENTMAP_INFOWINDOW_IMAGE_MAX_HEIGHT_DSC" default="0"/>
+				
+				
+				
+				<field name="show_created_by_alias" type="list" default="0" label="CONTENTMAP_INFOWINDOW_SHOWALIAS_LBL">
+					<option value="0">JHIDE</option>
+					<option value="1">JSHOW</option>
+				</field>
+				<field name="show_created" type="list" default="0" label="CONTENTMAP_INFOWINDOW_SHOWDATE_LBL">
+					<option value="0">JHIDE</option>
+					<option value="1">JSHOW</option>
+				</field>
+				<field name="show_intro" type="list" default="1" label="JGLOBAL_SHOW_INTRO_LABEL">
+					<option value="0">JHIDE</option>
+					<option value="1">JSHOW</option>
+				</field>
+				<field name="intro_clean_html_tags" type="list" default="1" label="CONTENTMAP_INTRO_CLEAN_HTML_TAGS_LBL"  description="CONTENTMAP_INTRO_CLEAN_HTML_TAGS_DSC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="introtext_size" type="text" size="6" label="CONTENTMAP_INFOWINDOW_TEXT_SIZE_LBL" description="CONTENTMAP_INFOWINDOW_TEXT_SIZE_DSC" default="300" />
+
+
+				<!--			<fieldset name="filtering" label="CONTENTMAP_FILTERING_OPTIONS_LBL"> -->
+				<field type="ossheader" default="CONTENTMAP_FILTERING_OPTIONS_LBL" icon="filter-16.png"/>
+				
+				
+				<field name="category_legend_filter" type="list" default="0" label="CONTENTMAP_CATEGORY_LEGEND_FILTER_LBL" description="CONTENTMAP_CATEGORY_LEGEND_FILTER_DSC">
+					<option value="0">JHIDE</option>
+					<option value="1">CONTENTMAP_CATEGORIES</option>
+					<option value="2">CONTENTMAP_TAGS</option>
+				</field>
+				
+				<field name="show_deselect_all" type="list" default="0" label="CONTENTMAP_SHOW_DESELECT_ALL_LBL" description="CONTENTMAP_SHOW_DESELECT_ALL_DSC">
+					<option value="0">JHIDE</option>
+					<option value="1">JSHOW</option>
+				</field>
+				
+				
+				<!--
+				<field name="tags_legend_filter" type="list" default="0" label="CONTENTMAP_TAGS_LEGEND_FILTER_LBL">
+					<option value="0">JHIDE</option>
+					<option value="1">JSHOW</option>
+				</field>
+-->
+				<field name="featured" type="list" default="0,1" label="CONTENTMAP_FEATURED_ARTICLES_LBL" description="CONTENTMAP_FEATURED_ARTICLES_DSC">
+					<option value="0,1">CONTENTMAP_ALL_ARTICLES</option>
+					<option value="1">CONTENTMAP_FEATURED_ARTICLES</option>
+					<option value="0">CONTENTMAP_UNFEATURED_ARTICLES</option>
+				</field>
+				<field type="spacer" hr="true" />
+				<field name="category_filter_type" type="list" default="0" label="CONTENTMAP_FILTERINGTYPE_LBL" description="CONTENTMAP_FILTERINGTYPE_DSC">
+					<option value="IN">CONTENTMAP_INCLUSIVE</option>
+					<option value="NOT IN">CONTENTMAP_EXCLUSIVE</option>
+					<option value="0">JDISABLED</option>
+				</field>
+				<field name="catid" type="category" extension="com_content" multiple="true" size="5" label="JCATEGORIES" description="CONTENTMAP_SELECT_ITEMS_DSC">
+				</field>
+				<field type="spacer" hr="true" />
+				<field name="author_filtering_type" type="list" default="0" label="CONTENTMAP_FILTERINGTYPE_LBL" description="CONTENTMAP_FILTERINGTYPE_DSC">
+					<option value="IN">CONTENTMAP_INCLUSIVE</option>
+					<option value="NOT IN">CONTENTMAP_EXCLUSIVE</option>
+					<option value="0">JDISABLED</option>
+				</field>
+				<field name="created_by" type="sql" multiple="true" size="5" label="CONTENTMAP_AUTHORS_LBL" description="CONTENTMAP_SELECT_ITEMS_DSC"
+					query="select id, name, username from #__users where id IN (select distinct(created_by) from #__content) order by name ASC"
+					key_field="id" value_field="name">
+				</field>
+
+
+				<field type="spacer" hr="true" />
+				<field name="tag_filtering_type_list" type="list" default="0" label="CONTENTMAP_FILTERINGTYPE_LBL" description="CONTENTMAP_FILTERINGTYPE_DSC">
+					<option value="IN">CONTENTMAP_INCLUSIVE</option>
+					<option value="NOT IN">CONTENTMAP_EXCLUSIVE</option>
+					<option value="0">JDISABLED</option>
+				</field>
+				<field name="tagid" type="tag" multiple="true" label="JTAG" mode="ajax" description="CONTENTMAP_SELECT_ITEMS_DSC" />
+
+
+				<field type="spacer" hr="true" />
+				<field name="article_filtering_type" type="list" default="0" label="CONTENTMAP_FILTERINGTYPE_LBL" description="CONTENTMAP_FILTERINGTYPE_DSC">
+					<option value="IN">CONTENTMAP_INCLUSIVE</option>
+					<option value="NOT IN">CONTENTMAP_EXCLUSIVE</option>
+					<option value="0">JDISABLED</option>
+				</field>
+				<field name="artid" type="sql" multiple="true" size="5" label="CONTENTMAP_ARTICLES_LBL" description="CONTENTMAP_SELECT_ITEMS_DSC" query="SELECT id, title FROM #__content order by title ASC" key_field="id" value_field="title" />
+
+
+				<field type="spacer" hr="true" />
+				<field type="spacer" hr="true" />	
+				<field type="spacer" hr="true" />
+				
+			</fieldset>
+			
+			<fieldset name="geo_chart_settings"
+				label="GEO_TAB_TITLE">
+					<field name="data_source" type="list" label="CONTENTMAP_DATASOURCE_LBL" description="CONTENTMAP_DATASOURCE_LBL_DESC" default="0">
+					<option value="0">CONTENTMAP_JOOMLA_ARTICLES</option>
+					<!--<option value="joomlausers">CONTENTMAP_JOOMLA_USERS</option>-->
+					<!-- <option value="smf">CONTENTMAP_CONNECTOR_SMF</option> -->
+					<!--<option value="1">CONTENTMAP_CONNECTOR</option>-->
+					<option value="joomlatags">CONTENTMAP_JOOMLA_TAGS</option>
+				</field>
+				
+				<field name="geo_displayMode"
+					type="list"
+					default="regions"
+					label="GEO_DISPLAYMODE_LABEL"
+					description="GEO_DISPLAYMODE_DESC">
+					<option value="regions">REGION_MAP</option>
+					<option value="markers">MARKER_MAP</option>
+				</field>
+
+				<field name="geo_resolution"
+					type="list"
+					default="provinces"
+					label="GEO_RESOLUTION_LABEL"
+					description="GEO_RESOLUTION_DESC">
+					<option value="countries">COUNTRIES</option>
+					<option value="provinces">PROVINCES</option>
+					<option value="metros">METROS</option>
+				</field>
+					
+				<field name="geo_region" type="list" label="GEO_REGION_LABEL" description="GEO_REGION_DESC" default="IT">
+					<option value="world">World</option>
+					<option value="150">Europe</option>
+					<option value="154">Northern Europe</option>
+					<option value="155">Western Europe</option>
+					<option value="151">Eastern Europe</option>
+					<option value="039">Southern Europe</option>
+					<option value="019">Americas</option>
+					<option value="021">Northern America</option>
+					<option value="029">Caribbean</option>
+					<option value="013">Central America</option>
+					<option value="005">South America</option>
+					<option value="002">Africa</option>
+					<option value="015">Northern Africa</option>
+					<option value="011">Western Africa</option>
+					<option value="017">Middle Africa</option>
+					<option value="014">Eastern Africa</option>
+					<option value="018">Southern Africa</option>
+					<option value="142">Asia</option>
+					<option value="143">Central Asia</option>
+					<option value="030">Eastern Asia</option>
+					<option value="034">Southern Asia</option>
+					<option value="035">South-Eastern Asia</option>
+					<option value="145">Western Asia</option>
+					<option value="009">Oceania</option>
+					<option value="053">Australia and New Zealand</option>
+					<option value="054">Melanesia</option>
+					<option value="057">Micronesia</option>
+					<option value="061">Polynesia</option>
+					<option value="world">--------</option>
+					<option value="AD">Andorra</option>
+					<option value="AE">United Arab Emirates</option>
+					<option value="AF">Afghanistan</option>
+					<option value="AG">Antigua and Barbuda</option>
+					<option value="AI">Anguilla</option>
+					<option value="AL">Albania</option>
+					<option value="AM">Armenia</option>
+					<option value="AO">Angola</option>
+					<option value="AQ">Antarctica</option>
+					<option value="AR">Argentina</option>
+					<option value="AS">American Samoa</option>
+					<option value="AT">Austria</option>
+					<option value="AU">Australia</option>
+					<option value="AW">Aruba</option>
+					<option value="AX">Åland Islands</option>
+					<option value="AZ">Azerbaijan</option>
+					<option value="BA">Bosnia and Herzegovina</option>
+					<option value="BB">Barbados</option>
+					<option value="BD">Bangladesh</option>
+					<option value="BE">Belgium</option>
+					<option value="BF">Burkina Faso</option>
+					<option value="BG">Bulgaria</option>
+					<option value="BH">Bahrain</option>
+					<option value="BI">Burundi</option>
+					<option value="BJ">Benin</option>
+					<option value="BL">Saint Barthélemy</option>
+					<option value="BM">Bermuda</option>
+					<option value="BN">Brunei Darussalam</option>
+					<option value="BO">Bolivia</option>
+					<option value="BQ">Bonaire</option>
+					<option value="BR">Brazil</option>
+					<option value="BS">Bahamas</option>
+					<option value="BT">Bhutan</option>
+					<option value="BV">Bouvet Island</option>
+					<option value="BW">Botswana</option>
+					<option value="BY">Belarus</option>
+					<option value="BZ">Belize</option>
+					<option value="CA">Canada</option>
+					<option value="CC">Cocos</option>
+					<option value="CD">Congo</option>
+					<option value="CF">Central African Republic</option>
+					<option value="CH">Switzerland</option>
+					<option value="CI">Côte d'Ivoire</option>
+					<option value="CK">Cook Islands</option>
+					<option value="CL">Chile</option>
+					<option value="CM">Cameroon</option>
+					<option value="CN">China</option>
+					<option value="CO">Colombia</option>
+					<option value="CR">Costa Rica</option>
+					<option value="CU">Cuba</option>
+					<option value="CV">Cabo Verde</option>
+					<option value="CW">Curaçao</option>
+					<option value="CX">Christmas Island</option>
+					<option value="CY">Cyprus</option>
+					<option value="CZ">Czech Republic</option>
+					<option value="DE">Germany</option>
+					<option value="DJ">Djibouti</option>
+					<option value="DK">Denmark</option>
+					<option value="DM">Dominica</option>
+					<option value="DO">Dominican Republic</option>
+					<option value="DZ">Algeria</option>
+					<option value="EC">Ecuador</option>
+					<option value="EE">Estonia</option>
+					<option value="EG">Egypt</option>
+					<option value="EH">Western Sahara</option>
+					<option value="ER">Eritrea</option>
+					<option value="ES">Spain</option>
+					<option value="ET">Ethiopia</option>
+					<option value="FI">Finland</option>
+					<option value="FJ">Fiji</option>
+					<option value="FK">Falkland Islands (Malvinas)</option>
+					<option value="FM">Micronesia</option>
+					<option value="FO">Faroe Islands</option>
+					<option value="FR">France</option>
+					<option value="GA">Gabon</option>
+					<option value="GB">United Kingdom</option>
+					<option value="GD">Grenada</option>
+					<option value="GE">Georgia</option>
+					<option value="GF">French Guiana</option>
+					<option value="GG">Guernsey</option>
+					<option value="GH">Ghana</option>
+					<option value="GI">Gibraltar</option>
+					<option value="GL">Greenland</option>
+					<option value="GM">Gambia</option>
+					<option value="GN">Guinea</option>
+					<option value="GP">Guadeloupe</option>
+					<option value="GQ">Equatorial Guinea</option>
+					<option value="GR">Greece</option>
+					<option value="GS">South Georgia and the South Sandwich Islands</option>
+					<option value="GT">Guatemala</option>
+					<option value="GU">Guam</option>
+					<option value="GW">Guinea-Bissau</option>
+					<option value="GY">Guyana</option>
+					<option value="HK">Hong Kong</option>
+					<option value="HM">Heard Island and McDonald Islands</option>
+					<option value="HN">Honduras</option>
+					<option value="HR">Croatia</option>
+					<option value="HT">Haiti</option>
+					<option value="HU">Hungary</option>
+					<option value="ID">Indonesia</option>
+					<option value="IE">Ireland</option>
+					<option value="IL">Israel</option>
+					<option value="IM">Isle of Man</option>
+					<option value="IN">India</option>
+					<option value="IO">British Indian Ocean Territory</option>
+					<option value="IQ">Iraq</option>
+					<option value="IR">Iran</option>
+					<option value="IS">Iceland</option>
+					<option value="IT">Italy</option>
+					<option value="JE">Jersey</option>
+					<option value="JM">Jamaica</option>
+					<option value="JO">Jordan</option>
+					<option value="JP">Japan</option>
+					<option value="KE">Kenya</option>
+					<option value="KG">Kyrgyzstan</option>
+					<option value="KH">Cambodia</option>
+					<option value="KI">Kiribati</option>
+					<option value="KM">Comoros</option>
+					<option value="KN">Saint Kitts and Nevis</option>
+					<option value="KR">Korea</option>
+					<option value="KW">Kuwait</option>
+					<option value="KY">Cayman Islands</option>
+					<option value="KZ">Kazakhstan</option>
+					<option value="LA">Lao People's Democratic Republic</option>
+					<option value="LB">Lebanon</option>
+					<option value="LC">Saint Lucia</option>
+					<option value="LI">Liechtenstein</option>
+					<option value="LK">Sri Lanka</option>
+					<option value="LR">Liberia</option>
+					<option value="LS">Lesotho</option>
+					<option value="LT">Lithuania</option>
+					<option value="LU">Luxembourg</option>
+					<option value="LV">Latvia</option>
+					<option value="LY">Libya</option>
+					<option value="MA">Morocco</option>
+					<option value="MC">Monaco</option>
+					<option value="MD">Moldova</option>
+					<option value="ME">Montenegro</option>
+					<option value="MF">Saint Martin</option>
+					<option value="MG">Madagascar</option>
+					<option value="MH">Marshall Islands</option>
+					<option value="MK">Macedonia</option>
+					<option value="ML">Mali</option>
+					<option value="MM">Myanmar</option>
+					<option value="MN">Mongolia</option>
+					<option value="MO">Macao</option>
+					<option value="MP">Northern Mariana Islands</option>
+					<option value="MQ">Martinique</option>
+					<option value="MR">Mauritania</option>
+					<option value="MS">Montserrat</option>
+					<option value="MT">Malta</option>
+					<option value="MU">Mauritius</option>
+					<option value="MV">Maldives</option>
+					<option value="MW">Malawi</option>
+					<option value="MX">Mexico</option>
+					<option value="MY">Malaysia</option>
+					<option value="MZ">Mozambique</option>
+					<option value="NA">Namibia</option>
+					<option value="NC">New Caledonia</option>
+					<option value="NE">Niger</option>
+					<option value="NF">Norfolk Island</option>
+					<option value="NG">Nigeria</option>
+					<option value="NI">Nicaragua</option>
+					<option value="NL">Netherlands</option>
+					<option value="NO">Norway</option>
+					<option value="NP">Nepal</option>
+					<option value="NR">Nauru</option>
+					<option value="NU">Niue</option>
+					<option value="NZ">New Zealand</option>
+					<option value="OM">Oman</option>
+					<option value="PA">Panama</option>
+					<option value="PE">Peru</option>
+					<option value="PF">French Polynesia</option>
+					<option value="PG">Papua New Guinea</option>
+					<option value="PH">Philippines</option>
+					<option value="PK">Pakistan</option>
+					<option value="PL">Poland</option>
+					<option value="PM">Saint Pierre and Miquelon</option>
+					<option value="PN">Pitcairn</option>
+					<option value="PR">Puerto Rico</option>
+					<option value="PS">Palestine</option>
+					<option value="PT">Portugal</option>
+					<option value="PW">Palau</option>
+					<option value="PY">Paraguay</option>
+					<option value="QA">Qatar</option>
+					<option value="RE">Réunion</option>
+					<option value="RO">Romania</option>
+					<option value="RS">Serbia</option>
+					<option value="RU">Russian Federation</option>
+					<option value="RW">Rwanda</option>
+					<option value="SA">Saudi Arabia</option>
+					<option value="SB">Solomon Islands</option>
+					<option value="SC">Seychelles</option>
+					<option value="SD">Sudan</option>
+					<option value="SE">Sweden</option>
+					<option value="SG">Singapore</option>
+					<option value="SH">Saint Helena, Ascension and Tristan da Cunha</option>
+					<option value="SI">Slovenia</option>
+					<option value="SJ">Svalbard and Jan Mayen</option>
+					<option value="SK">Slovakia</option>
+					<option value="SL">Sierra Leone</option>
+					<option value="SM">San Marino</option>
+					<option value="SN">Senegal</option>
+					<option value="SO">Somalia</option>
+					<option value="SR">Suriname</option>
+					<option value="SS">South Sudan</option>
+					<option value="ST">Sao Tome and Principe</option>
+					<option value="SV">El Salvador</option>
+					<option value="SX">Sint Maarten (Dutch part)</option>
+					<option value="SY">Syrian Arab Republic</option>
+					<option value="SZ">Swaziland</option>
+					<option value="TC">Turks and Caicos Islands</option>
+					<option value="TD">Chad</option>
+					<option value="TF">French Southern Territories</option>
+					<option value="TG">Togo</option>
+					<option value="TH">Thailand</option>
+					<option value="TJ">Tajikistan</option>
+					<option value="TK">Tokelau</option>
+					<option value="TL">Timor-Leste</option>
+					<option value="TM">Turkmenistan</option>
+					<option value="TN">Tunisia</option>
+					<option value="TO">Tonga</option>
+					<option value="TR">Turkey</option>
+					<option value="TT">Trinidad and Tobago</option>
+					<option value="TV">Tuvalu</option>
+					<option value="TW">Taiwan</option>
+					<option value="TZ">Tanzania</option>
+					<option value="UA">Ukraine</option>
+					<option value="UG">Uganda</option>
+					<option value="UM">United States Minor Outlying Islands</option>
+					<option value="US">United States</option>
+					<option value="UY">Uruguay</option>
+					<option value="UZ">Uzbekistan</option>
+					<option value="VA">Holy See (Vatican City State)</option>
+					<option value="VC">Saint Vincent and the Grenadines</option>
+					<option value="VE">Venezuela</option>
+					<option value="VG">Virgin Islands, British</option>
+					<option value="VI">Virgin Islands, U.S.</option>
+					<option value="VN">Viet Nam</option>
+					<option value="VU">Vanuatu</option>
+					<option value="WF">Wallis and Futuna</option>
+					<option value="WS">Samoa</option>
+					<option value="YE">Yemen</option>
+					<option value="YT">Mayotte</option>
+					<option value="ZA">South Africa</option>
+					<option value="ZM">Zambia</option>
+					<option value="ZW">Zimbabwe</option>
+				</field>
+					
+				<field name="geo_enableRegionInteractivity"
+					type="radio"
+					class="btn-group"
+					default="1"
+					label="GEO_ENABLEREGIONINTERACTIVITY_LABEL"
+					description="GEO_ENABLEREGIONINTERACTIVITY_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				
+				<field name="geo_markerOpacity"
+					type="list"
+					class="btn-group"
+					default="0.8"
+					label="GEO_MARKEROPACITY_LABEL"
+					description="GEO_MARKEROPACITY_DESC">
+					<option value="0.0">0.0</option>
+					<option value="0.1">0.1</option>
+					<option value="0.2">0.2</option>
+					<option value="0.3">0.3</option>
+					<option value="0.4">0.4</option>
+					<option value="0.5">0.5</option>
+					<option value="0.6">0.6</option>
+					<option value="0.7">0.7</option>
+					<option value="0.8">0.8</option>
+					<option value="0.9">0.9</option>
+					<option value="1.0">1.0</option>
+				</field>
+				
+				<field type="spacer" hr="true" label="Color Axis"/>	
+				<!--
+				<field name="geo_colorAxis_minValue"
+					type="text"
+					default="0"
+					label="GEO_COLORAXIS_MINVALUE_LABEL"
+					description="GEO_COLORAXIS_MINVALUE_DESC" />
+				<field name="geo_colorAxis_maxValue"
+					type="text"
+					default=""
+					label="GEO_COLORAXIS_MAXVALUE_LABEL"
+					description="GEO_COLORAXIS_MAXVALUE_DESC" />
+					  -->
+				<field name="geo_disableGradation"
+					type="radio"
+					class="btn-group"
+					default="0"
+					label="CONTENTMAP_DISABLE_GRADATION_LABEL"
+					description="CONTENTMAP_DISABLE_GRADATION_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="geo_colorAxis_fromColor"
+					type="color"
+					default="#33c7f0"
+					label="GEO_COLORAXIS_FROMCOLOR_LABEL"
+					description="GEO_COLORAXIS_FROMCOLOR_DESC" />
+				<field name="geo_colorAxis_toColor"
+					type="color"
+					default="#0c71b0"
+					label="GEO_COLORAXIS_TOCOLOR_LABEL"
+					description="GEO_COLORAXIS_TOCOLOR_DESC" />
+
+				<field name="geo_datalessRegionColor"
+					type="color"
+					default="#F5F5F5"
+					label="GEO_DATALESSREGIONCOLOR_LABEL"
+					description="GEO_DATALESSREGIONCOLOR_DESC" />
+					
+				<field name="geo_backgroundColor"
+					type="color"
+					default="#b3d1ff"
+					label="GEO_BACKGROUNDCOLOR_LABEL"
+					description="GEO_BACKGROUNDCOLOR_DESC" />
+
+				<field type="spacer" hr="true" />
+
+				<field 
+					name="tags_content_types" 
+					type="contenttype"
+					label="COM_TAGS_FIELD_TYPE_LABEL"
+					description="COM_TAGS_FIELD_TYPE_DESC"
+					multiple="true"
+				/>
+				
+				<field 
+					name="tags_parent_id" 
+					type="tag" 
+					mode="nested"
+					label="COM_TAGS_FIELD_PARENT_TAG_LABEL"
+					description="COM_TAGS_FIELD_PARENT_TAG_DESC"
+				>
+					<option value="">JNONE</option>
+					<option value="1">JGLOBAL_ROOT</option>
+				</field>				
+
+				<field name="tags_filter_type" type="list" default="0" label="CONTENTMAP_FILTERINGTYPE_LBL" description="CONTENTMAP_FILTERINGTYPE_DSC">
+					<option value="IN">CONTENTMAP_INCLUSIVE</option>
+					<option value="NOT IN">CONTENTMAP_EXCLUSIVE</option>
+					<option value="0">JDISABLED</option>
+				</field>
+				<field name="tagsid" type="tag" custom="deny" multiple="true" size="5" label="CONTENTMAP_TAGS" description="CONTENTMAP_SELECT_ITEMS_DSC">
+				</field>
+				<field type="spacer" hr="true" />
+				<field type="spacer" hr="true" />
+				<field type="spacer" hr="true" />	
+				<field type="spacer" hr="true" />	
+			</fieldset>			
+
+			<fieldset name="advanced">
+				<field name="map_style_json" type="textarea" default="" label="CONTENTMAP_MAP_STYLE_JSON_LBL" description="CONTENTMAP_MAP_STYLE_JSON_DSC" rows="10" cols="5" filter="safehtml" />
+			
+			
+			
+				<field name="layout" type="modulelayout" label="JFIELD_ALT_LAYOUT_LABEL" description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
+				<field name="css" type="filelist" label="CONTENTMAP_ALT_CSS_LBL" description="CONTENTMAP_ALT_CSS_DSC" default="default.php" hide_none="true" directory="libraries/contentmap/css" filter="\.php$" exclude="" stripext="true"/>
+				<field name="moduleclass_sfx" type="text" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+				<!--<field name="data_url" type="text" label="CONTENTMAP_CONNECTOR_URL_LBL" description="CONTENTMAP_CONNECTOR_URL_DSC" default="http://forum.joomla.it/libraries/contentmap/json/smf.php"/>-->
+
+			</fieldset>
+
+		</fields>
+	</config>
+
+</extension>

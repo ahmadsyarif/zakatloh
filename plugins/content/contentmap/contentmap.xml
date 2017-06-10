@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" version="1.7" method="upgrade" group="content">
+	<name>plg_content_contentmap</name>
+	<creationDate>13/02/2012</creationDate>
+	<author>Open Source Solutions SLU</author>
+	<authorEmail>info@opensourcesolutions.es</authorEmail>
+	<authorUrl>http://www.opensourcesolutions.es/</authorUrl>
+	<copyright>Open Source Solutions SLU</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<version>1.3.5</version>
+	<description>PLG_CONTENTMAP_DESCRIPTION</description>
+
+	<files>
+		<filename plugin="contentmap">contentmap.php</filename>
+		<folder>css</folder>
+		<folder>js</folder>
+		<folder>language</folder>
+		<folder>sql</folder>
+	</files>
+
+	<install>
+		<sql><file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file></sql>
+	</install>
+
+	<config>
+		<fields name="params" addfieldpath="/libraries/contentmap/models/fields">
+			<fieldset name="basic">
+
+				<field type="langloader"/>
+				<field type="wizard" icon="exclamation-16.png" text="CONTENTMAP_NO_DATA" url="index.php?option=com_contentmap"/>
+				<field type="transchecker"/>
+				<field type="register"/>
+				<field name="api_key" type="text" label="CONTENTMAP_API_KEY_LBL" description="CONTENTMAP_API_KEY_DSC" size="26"/>
+				<field type="ossheader" default="CONTENTMAP_MAP_LAYOUT" icon="map-16.png"/>
+				<field name="map_width" type="text" size="6" label="CONTENTMAP_WIDTH" description="CONTENTMAP_MAPWIDTH_DSC" default="100" required="true"/>
+				<field name="map_width_unit" type="list" label="CONTENTMAP_UNITS_LBL" default="%">
+					<option value="px">CONTENTMAP_PIXELS</option>
+					<option value="%">CONTENTMAP_PERCENT</option>
+				</field>
+				<field name="map_height" type="text" size="6" label="CONTENTMAP_HEIGHT" description="CONTENTMAP_MAPHEIGHT_DSC" default="400" required="true"/>
+				
+                <field name="position" type="list" default="AC" label="CONTENTMAP_POSITION_LBL" description="CONTENTMAP_POSITION_DSC">
+                    <option value="BC">CONTENTMAP_BEFORECONTENT</option>
+                    <option value="BCL">CONTENTMAP_BEFORECONTENT_LEFT</option>
+                    <option value="BCR">CONTENTMAP_BEFORECONTENT_RIGHT</option>
+                    <option value="AC">CONTENTMAP_AFTERCONTENT</option>
+                </field>
+				
+				<field name="zoom" type="list" default="17" label="CONTENTMAP_ZOOM_LBL" description="CONTENTMAP_ZOOM_DSC">
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+					<option value="11">11</option>
+					<option value="12">12</option>
+					<option value="13">13</option>
+					<option value="14">14</option>
+					<option value="15">15</option>
+					<option value="16">16</option>
+					<option value="17">17</option>
+					<option value="18">18</option>
+					<option value="19">19</option>
+					<option value="20">20</option>
+					<option value="21">21</option>
+				</field>
+				<field name="map_type" type="list" label="CONTENTMAP_MAPTYPE_LBL" default="ROADMAP">
+					<option value="ROADMAP">CONTENTMAP_MAPTYPE_ROADMAP</option>
+					<option value="SATELLITE">CONTENTMAP_MAPTYPE_SATELLITE</option>
+					<option value="HYBRID">CONTENTMAP_MAPTYPE_HYBRID</option>
+					<option value="TERRAIN">CONTENTMAP_MAPTYPE_TERRAIN</option>
+				</field>
+                <field name="streetView" type="list" label="CONTENTMAP_STREETVIEW" default="0">
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
+                <field name="hideStreetViewControl" type="list" label="CONTENTMAP_HIDE_STREETVIEW_CONTROL" description="CONTENTMAP_HIDE_STREETVIEW_CONTROL_DSC" default="0">
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
+                <field name="hideZoomControl" type="list" label="CONTENTMAP_HIDE_ZOOM_CONTROL" description="CONTENTMAP_HIDE_ZOOM_CONTROL_DSC" default="0">
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
+				
+				<field name="watermark_url" type="url" default="" label="CONTENTMAP_WATERMARK_URL_LBL" description="CONTENTMAP_WATERMARK_URL_DSC" />
+				<field name="watermark_position" type="list" label="CONTENTMAP_WATERMARK_POSITION_LBL" default="RIGHT_TOP">
+					<option value="TOP_CENTER">CONTENTMAP_WATERMARK_POSITION_TOP_CENTER</option>
+					<option value="TOP_LEFT">CONTENTMAP_WATERMARK_POSITION_TOP_LEFT</option>
+					<option value="TOP_RIGHT">CONTENTMAP_WATERMARK_POSITION_TOP_RIGHT</option>
+					<option value="LEFT_TOP">CONTENTMAP_WATERMARK_POSITION_LEFT_TOP</option>
+					<option value="RIGHT_TOP">CONTENTMAP_WATERMARK_POSITION_RIGHT_TOP</option>
+					<option value="LEFT_CENTER">CONTENTMAP_WATERMARK_POSITION_LEFT_CENTER</option>
+					<option value="RIGHT_CENTER">CONTENTMAP_WATERMARK_POSITION_RIGHT_CENTER</option>
+					<option value="LEFT_BOTTOM">CONTENTMAP_WATERMARK_POSITION_LEFT_BOTTOM</option>
+					<option value="RIGHT_BOTTOM">CONTENTMAP_WATERMARK_POSITION_RIGHT_BOTTOM</option>
+					<option value="BOTTOM_CENTER">CONTENTMAP_WATERMARK_POSITION_BOTTOM_CENTER</option>
+					<option value="BOTTOM_LEFT">CONTENTMAP_WATERMARK_POSITION_BOTTOM_LEFT</option>
+					<option value="BOTTOM_RIGHT">CONTENTMAP_WATERMARK_POSITION_BOTTOM_RIGHT</option>
+				</field>
+				
+				<field name="show_weather" type="list" default="0" label="CONTENTMAP_SHOW_WEATHER_LABEL" description="CONTENTMAP_SHOW_WEATHER_DESC">
+					<option value="0">JHIDE</option>
+					<option value="1">JSHOW</option>
+				</field>
+				
+				<field name="show_other_markers" type="list" default="0" label="CONTENTMAP_SHOW_OTHER_MARKERS_LABEL" description="CONTENTMAP_SHOW_OTHER_MARKERS_DSC">
+					<option value="0">JHIDE</option>
+					<option value="1">JSHOW</option>
+				</field>
+				
+				
+				<field name="hide_poi" type="list" default="0" label="CONTENTMAP_HIDE_POI_LABEL" description="CONTENTMAP_HIDE_POI_DSC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				
+				<field 
+					name="excludeArticles" 
+					type="text" 
+					default="" 
+					size="40" 					
+					label="CONTENTMAP_EXCLUDE_ARTICLES_LBL" 
+					description="CONTENTMAP_EXCLUDE_ARTICLES_DESC" />
+				<field 
+					name="excludeCats" 
+					type="text" 
+					default="" 
+					size="40" 					
+					label="CONTENTMAP_EXCLUDE_CATEGORIES_LBL" 
+					description="CONTENTMAP_EXCLUDE_CATEGORIES_DESC" />
+				
+
+				<field type="ossheader" default="CONTENTMAP_MARKERS_OPTIONS" icon="marker-16.png"/>
+				<field name="markers_icon" type="filelist" label="CONTENTMAP_MARKERS_ICON_LBL" description="CONTENTMAP_MARKERS_ICON_DSC" default="" hide_none="true" directory="media/contentmap/markers/icons" filter="\.png$" exclude="" stripext="" />
+                <field name="markers_preview" type="markerpreview" label="CONTENTMAP_MARKERS_PREVIEW"/>
+				<field name="markers_action" type="hidden" default="infowindow"/>
+
+				<field type="ossheader" default="CONTENTMAP_INFOWINDOWS" icon="infowindow-16.png"/>
+				<field name="infowindow_event" type="list" default="click" label="CONTENTMAP_INFOWINDOW_ACTION_LBL" description="CONTENTMAP_INFOWINDOW_ACTION_DSC">
+					<option value="click">CONTENTMAP_INFOWINDOW_ACTION_CLICK</option>
+					<option value="mouseover">CONTENTMAP_INFOWINDOW_ACTION_MOUSEOVER</option>
+					<option value="never">JDISABLED</option>
+				</field>
+				<!-- Infowindow maxWidth doesn't work as expected -->
+				<field name="infowindow_width" type="text" size="26" label="CONTENTMAP_WIDTH" description="CONTENTMAP_INFOWINDOWWIDTH_DSC" default="400"/>
+
+				<field name="show_title" type="list" default="1" label="JGLOBAL_SHOW_TITLE_LABEL" description="JGLOBAL_SHOW_TITLE_DESC">
+					<option value="0">JHIDE</option>
+					<option value="1">JSHOW</option>
+				</field>
+				<field name="link_titles" type="list" default="0" label="JGLOBAL_LINKED_TITLES_LABEL" description="JGLOBAL_LINKED_TITLES_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="link_target" type="list" label="CONTENTMAP_INFOWINDOW_TARGET_LBL" description="CONTENTMAP_INFOWINDOW_TARGET_DSC" default="_self">
+					<option value="_self">CONTENTMAP_TARGET_SELF</option>
+					<option value="_blank">CONTENTMAP_TARGET_BLANK</option>
+					<option value="_parent">CONTENTMAP_TARGET_PARENT</option>
+					<option value="_top">CONTENTMAP_TARGET_TOP</option>
+				</field>
+				
+				<field name="show_readmore" type="list" default="0" label="CONTENTMAP_SHOW_READMORE_LABEL" description="CONTENTMAP_SHOW_READMORE_DESC">
+					<option value="0">JHIDE</option>
+					<option value="1">JSHOW</option>
+				</field>
+				
+				<field name="show_image" type="list" default="1" label="CONTENTMAP_INFOWINDOW_SHOWIMAGE_LBL" description="CONTENTMAP_INFOWINDOW_SHOWIMAGE_DSC">
+					<option value="0">JHIDE</option>
+					<option value="1">JSHOW</option>
+				</field>
+				
+				<field name="image_max_width" type="text" size="6" label="CONTENTMAP_INFOWINDOW_IMAGE_MAX_WIDTH_LBL" description="CONTENTMAP_INFOWINDOW_IMAGE_MAX_WIDTH_DSC" default="0"/>
+				<field name="image_max_height" type="text" size="6" label="CONTENTMAP_INFOWINDOW_IMAGE_MAX_HEIGHT_LBL" description="CONTENTMAP_INFOWINDOW_IMAGE_MAX_HEIGHT_DSC" default="0"/>
+				
+				<field name="show_created_by_alias" type="list" default="0" label="CONTENTMAP_INFOWINDOW_SHOWALIAS_LBL">
+					<option value="0">JHIDE</option>
+					<option value="1">JSHOW</option>
+				</field>
+				<field name="show_created" type="list" default="0" label="CONTENTMAP_INFOWINDOW_SHOWDATE_LBL">
+					<option value="0">JHIDE</option>
+					<option value="1">JSHOW</option>
+				</field>
+				<field name="show_intro" type="list" default="1" label="JGLOBAL_SHOW_INTRO_LABEL">
+					<option value="0">JHIDE</option>
+					<option value="1">JSHOW</option>
+				</field>
+
+				<field name="intro_from" type="list" default="article" label="CONTENTMAP_TAKE_INTRO_FROM_LBL" description="CONTENTMAP_TAKE_INTRO_FROM_DSC">
+					<option value="article">CONTENTMAP_INTRO_FROM_ARTICLE</option>
+					<option value="metadesc">CONTENTMAP_INTRO_FROM_METADESC</option>
+				</field>
+				
+				
+				<field name="intro_clean_html_tags" type="list" default="1" label="CONTENTMAP_INTRO_CLEAN_HTML_TAGS_LBL"  description="CONTENTMAP_INTRO_CLEAN_HTML_TAGS_DSC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="introtext_size" type="text" size="6" label="CONTENTMAP_INFOWINDOW_TEXT_SIZE_LBL" description="CONTENTMAP_INFOWINDOW_TEXT_SIZE_DSC" default="300" />
+                <field name="showDirectionsMarker" type="list" label="CONTENTMAP_MARKERS_SHOW_DIRECTIONS_LBL" default="0">
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
+			</fieldset>
+
+			<fieldset name="advanced">
+				<field name="map_style_json" type="textarea" default="" label="CONTENTMAP_MAP_STYLE_JSON_LBL" description="CONTENTMAP_MAP_STYLE_JSON_DSC" rows="10" cols="5" filter="safehtml" />
+
+				<field name="css" type="filelist" label="CONTENTMAP_ALT_CSS_LBL" description="CONTENTMAP_ALT_CSS_DSC" default="default.css" hide_none="true" directory="libraries/contentmap/css" filter="\.php$" exclude="" stripext="true"/>
+				<!-- <field name="markers" type="hidden" default="markers.json" /> -->
+				
+			</fieldset>
+
+
+		</fields>
+	</config>
+</extension>
